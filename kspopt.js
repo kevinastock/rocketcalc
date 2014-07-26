@@ -466,19 +466,6 @@ function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, a
 }
 
 
-
-/*
-bootstrap_alert = function() {}
-bootstrap_alert.warning = function(message) {
-    $('#alert_placeholder').html('<div class="alert"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
-}
-
-
-$('#clickme').on('click', function() {
-    bootstrap_alert.warning('Your text goes here');
-});
-*/
-
 /*
  * Interface
  */
@@ -569,7 +556,7 @@ function generate_results() {
             html += '<td>' + s.end_mass.toFixed(2) + ' t </td></tr>';
             
             if (s.engine) {
-                html += '<tr><td></td><td class="danger" colspan="5"> Shutdown <strong>' + s.count + 'x ' + s.engine.name + '</strong></td></tr>';
+                html += '<tr class="danger"><td></td><td class="danger" colspan="5"> Shutdown <strong>' + s.count + 'x ' + s.engine.name + '</strong></td></tr>';
             }
         });
 
