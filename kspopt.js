@@ -470,8 +470,11 @@ function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, a
  * Interface
  */
 function generate_results() {
+    $('#results').hide();
+
     if ($('.has-error').length) {
         $('#results').html("<div class='alert alert-danger h3' role='alert'>Invalid Flight Parameters <small>Nobody understands Jeb's requirements</small></div>");
+        $('#results').show(400);
         return;
     }
 
@@ -570,6 +573,7 @@ function generate_results() {
     });
 
     $('#results').html(html);
+    $('#results').show(400);
     
 }
 
