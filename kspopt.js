@@ -1,18 +1,18 @@
 /*
  * The MIT License (MIT)
- * 
+ *
  *     Copyright (c) 2014 Kevin Stock
- * 
+ *
  *     Permission is hereby granted, free of charge, to any person obtaining a copy
  *     of this software and associated documentation files (the "Software"), to deal
  *     in the Software without restriction, including without limitation the rights
  *     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *     copies of the Software, and to permit persons to whom the Software is
  *     furnished to do so, subject to the following conditions:
- * 
+ *
  *     The above copyright notice and this permission notice shall be included in
  *     all copies or substantial portions of the Software.
- * 
+ *
  *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,9 +24,8 @@
 
 "use strict";
 
-// FIXME: tune thrust limiting per engine? For lowest Isp engines in multi configs at least
 // FIXME: limit max engines based on part selections
-// FIXME: move gimbal and deadend check to engine selection
+// FIXME: read url at load to set parameters?
 
 function Part(name, size, deadend, cost, mass, fuel, thrust, iatm, ivac, gimbal, cost_save) {
     this.name      = name;
@@ -56,7 +55,7 @@ function Result (engine_counts, tank, tank_count, dv, mass, cost, fuel_mass, fue
     this.awards        = [];
 }
 
-var awards = [ 
+var awards = [
 { name:'&#9733; Lowest cost with full tanks',         lookup: function (x) { return x.cost; },               reduce: Math.min, initial: Number.POSITIVE_INFINITY },
 { name:'&#9733; Lowest wet mass',                     lookup: function (x) { return x.mass; },               reduce: Math.min, initial: Number.POSITIVE_INFINITY },
 { name:'&#9733; Lowest dry mass',                     lookup: function (x) { return x.mass - x.fuel_mass; }, reduce: Math.min, initial: Number.POSITIVE_INFINITY },
@@ -140,7 +139,7 @@ var bodies = {
 
 var g0_isp = 9.82;
 
-/* 
+/*
  * itertools replacements
  */
 function combinations_with_replacement(pool, r) {
@@ -177,8 +176,9 @@ function combinations_with_replacement(pool, r) {
 }
 
 function groupby(items) {
-    if (items.length == 0)
-        return []
+    if (items.length == 0) {
+        return [];
+    }
 
     var index = 0, count = 1;
     var results = [];
@@ -254,11 +254,12 @@ function limit_engine_thrust(engine_counts, wet_mass, TWRg, atmo) {
 
     var tt = total_thrust(limited);
     var extra_dv = tt - TWRg * wet_mass;
-    
+
     var lowest = limited[0];
     var lowest_thrust = lowest.engine.thrust * lowest.count;
 
-    lowest.limit = Math.max(0, Math.min(1, (lowest_thrust - extra_dv) / lowest_thrust));
+    // Bump to prevent the new limit causes thrust to be less than TWRg
+    lowest.limit = Math.max(0, Math.min(1, ((lowest_thrust - extra_dv) / lowest_thrust) + 0.0000001));
 
     return limited;
 }
@@ -327,8 +328,8 @@ function shutdown_schedule(wet_mass, dry_mass, engine_counts, atmo, dv, TWRg) {
 
 function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting) {
     var best;
-    
-    while (tank_count > 0) {
+
+    while (tank_count >= 0) {
         var dry_mass = payload  + sum(engine_counts, function (x) { return x.engine.mass * x.count; }) + tank.mass * tank_count;
         var wet_mass = dry_mass + sum(engine_counts, function (x) { return x.engine.fuel * x.count; }) + tank.fuel * tank_count;
 
@@ -351,12 +352,12 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
 
         if (allow_shutdown) {
             var ssret = shutdown_schedule(wet_mass, dry_mass, limited_engines, atmo, dv, TWRg);
-            shutdown_sequence = ssret[0]; 
+            shutdown_sequence = ssret[0];
             staged_dv         = ssret[1];
             stage_mass        = ssret[2];
             final_engines     = ssret[3];
         } else {
-            shutdown_sequence = []; 
+            shutdown_sequence = [];
             staged_dv = 0;
             stage_mass = wet_mass;
             final_engines = limited_engines;
@@ -405,7 +406,7 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
 }
 
 function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks) {
-    var results = []
+    var results = [];
     // Loop through the number of allowed engines
     for(var num_engines=1; num_engines <= max_engines; num_engines++) {
         // Loop through the sets of engines
@@ -414,40 +415,38 @@ function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, a
             engine_counts.forEach( function (x) { x.limit = 1; });
             var d = new Date();
             var thrusts = $.map(engine_counts, function (x) { return x.engine.thrust; });
-            if ( 
+            if (
                 // At most one type of engine with only 1
                 sum(engine_counts, function (x) { return x.count == 1 ? 1 : 0; }) <= 1 &&
                 // Radial engines must have 0 or 2+
                 engine_counts.every(function (x) { return x.engine.size != 0 || x.count != 1; }) &&
-                // Only engines with gimbal if requested
-                !(gimbal && engine_counts.some(function (x) { return x.engine.gimbal == 0; })) &&
                 // Limit difference between biggest and smallet engine thrust
                 Math.max.apply(null, thrusts) / Math.min.apply(null, thrusts) <= max_thrust_ratio &&
-                // Optionally prevent 1x engine from a deadend (no node on engine)
+                // Prevent 1x engine from being a deadend (no node on engine)
                 !(!allow_deadend && engine_counts.some(function (x) { return x.engine.deadend && x.count == 1; }))) {
 
-                tanks.forEach( function (tank) {
-                    // Tanks must be same or bigger than biggest engine
-                    if (any_tanks || Math.max.apply(null, $.map(engine_counts, function (x) { return x.engine.size; })) <= tank.size) {
-                        var tank_count;
-                        if (tank.mass == 0) {
-                            tank_count = 0;
-                        } else {
-                            tank_count = required_tanks(payload, tank, engine_counts, atmo, dv);
-                        }
+                    tanks.forEach( function (tank) {
+                        // Tanks must be same or bigger than biggest engine
+                        if (any_tanks || Math.max.apply(null, $.map(engine_counts, function (x) { return x.engine.size; })) <= tank.size) {
+                            var tank_count;
+                            if (tank.mass == 0) {
+                                tank_count = 0;
+                            } else {
+                                tank_count = required_tanks(payload, tank, engine_counts, atmo, dv);
+                            }
 
-                        var best = optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting);
-                        if (best) {
-                            results.push(best);
+                            var best = optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting);
+                            if (best) {
+                                results.push(best);
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
         });
     }
-    
+
     if (results.length == 0)
-        return []
+        return [];
 
     awards.forEach( function (award) {
         var best;
@@ -481,6 +480,7 @@ function generate_results_inner() {
         return;
     }
 
+    // Read the data in
     var payload         = parseFloat($('#payload').val());
     var dv              = parseFloat($('#deltav').val());
     var twr             = parseFloat($('#twr').val());
@@ -495,14 +495,18 @@ function generate_results_inner() {
 
     var max_thrust_ratio = 25;
     var g0 = bodies[body].gravity;
-    
+
     var engines = [];
     var tanks = [new Part("DUMMY TANK", 4, false, 0, 0, 0, 0, 0, 0, 0, [])];
 
+    // Construct the set of engines and tanks to consider
     $.each(all_engines, function (k,v) {
         v.forEach(function (part) {
             if ($(part.selector).prop('checked')) {
-                engines.push(part);
+                // Only engines with gimbal if requested
+                if (!gimbal || part.gimbal > 0) {
+                    engines.push(part);
+                }
             }
         });
     });
@@ -515,8 +519,10 @@ function generate_results_inner() {
         });
     });
 
+    // Solve!
     var results = solve(payload, dv, twr * g0, atmo, max_engines, gimbal, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks);
 
+    // Generate output html
     var html = "<div class='header'><h4 class='text-muted'>Rockets</h3></div>";
 
     if (results.length == 0) {
@@ -538,9 +544,9 @@ function generate_results_inner() {
         if (r.tank != tanks[0]) {
             html += r.tank_count + 'x ' + r.tank.name;
         }
-        
+
         html += "</strong></div>";
-        html += '<div class="table-responsive"><table class="table"><thead><tr> <th>Total Δv</th> <th>Funds</th> <th>Wet Mass</th> <th>Dry Mass</th> </tr></thead> <tbody><tr>'
+        html += '<div class="table-responsive"><table class="table"><thead><tr> <th>Total Δv</th> <th>Funds</th> <th>Wet Mass</th> <th>Dry Mass</th> </tr></thead> <tbody><tr>';
 
         html += '<td>' + r.dv.toFixed(2) + ' m/s</td>';
         html += '<td>' + r.cost + '</td>';
@@ -549,9 +555,9 @@ function generate_results_inner() {
 
         html += '</tr></tbody></table></div>';
         //html += '<br/><div class="header"><h5 class="text-muted">Flight Plan</h5></div>'
-        html += '<br/>'
+        html += '<br/>';
 
-        html += '<div class="table-responsive"><table class="table"><thead><tr> <th>Phase</th> <th>Phase Δv</th> <th>TWR</th> <th>Fuel Burned</th> <th>Burn Time</th> <th>Shutdown Mass</th> </tr></thead> <tbody>'
+        html += '<div class="table-responsive"><table class="table"><thead><tr> <th>Phase</th> <th>Phase Δv</th> <th>TWR</th> <th>Fuel Burned</th> <th>Burn Time</th> <th>Shutdown Mass</th> </tr></thead> <tbody>';
         r.shutdown.forEach(function(s, i){
             html += '<tr><td>' + (i+1) + '</td>';
             html += '<td>' + s.stage_dv.toFixed(2) + ' m/s</td>';
@@ -559,7 +565,7 @@ function generate_results_inner() {
             html += '<td>' + (s.init_mass - s.end_mass).toFixed(2) + ' t</td>';
             html += '<td>' + s.burn_time.toFixed(2) + ' s </td>';
             html += '<td>' + s.end_mass.toFixed(2) + ' t </td></tr>';
-            
+
             if (s.engine) {
                 html += '<tr class="danger"><td></td><td class="danger" colspan="5"> Shutdown <strong>' + s.count + 'x ' + s.engine.name + '</strong></td></tr>';
             }
@@ -575,13 +581,15 @@ function generate_results_inner() {
     });
 
     $('#results').html(html);
+    // setTimeout was needed to stop jquery from doing the animation wrong when
+    // the script takes longer than the animation
     setTimeout(function(){$('#results').animate({height:'show'}, 300);}, 0);
 }
 
 $(document).ready(function() {
     // Initialize reference bodies
     $.each(bodies, function (k,v) {
-        $('#refbody').append($("<option></option>").prop("value",k).text(k))
+        $('#refbody').append($("<option></option>").prop("value",k).text(k));
     });
 
     function initalize_checkboxlist(data, key) {
@@ -595,7 +603,7 @@ $(document).ready(function() {
             });
 
             html += '</ul></li>';
-        }); 
+        });
         html += '</ul>';
         $('#' + key + '-checklist').html(html);
     }
@@ -615,25 +623,25 @@ $(document).ready(function() {
 
         // FIXME: not working, when a checkbox chages, make sure all parents are correct
         /*
-        for (var i = $('.nestedcb').find('ul').length - 1; i >= 0; i--) {
-            $('.nestedcb').find('ul:eq(' + i + ')').prev('label > input:checkbox').prop('checked', function () {
-                return $(this).parent().next('ul').find('label > input:unchecked').length === 0 ? true : false;
-            });
-        }
-        */
+         * for (var i = $('.nestedcb').find('ul').length - 1; i >= 0; i--) {
+         *     $('.nestedcb').find('ul:eq(' + i + ')').prev('label > input:checkbox').prop('checked', function () {
+         *         return $(this).parent().next('ul').find('label > input:unchecked').length === 0 ? true : false;
+         *     });
+         * }
+         */
     });
 
     // Make advanced options easier to click
     $('#collapseOneToggle').click(function(){$('#collapseOne').collapse('toggle')});
     var hoverstate;
     $('#collapseOneToggle').hover(
-        function(){ 
-            var link = $('a[href="#collapseOne"]'); 
+        function(){
+            var link = $('a[href="#collapseOne"]');
             hoverstate = link.css('text-decoration');
             link.css('text-decoration', 'underline');
         },
         function(){
-            var link = $('a[href="#collapseOne"]'); 
+            var link = $('a[href="#collapseOne"]');
             link.css('text-decoration', hoverstate);
         });
 
@@ -642,22 +650,22 @@ $(document).ready(function() {
     $('#refbody').change(function(){
         $('#deltav').val(bodies[$('#refbody').val()].dv);
         $('#atmo').val(bodies[$('#refbody').val()].atmo/2);
-        $('#deltav').parents('.form-group').removeClass('has-error'); 
-        $('#atmo').parents('.form-group').removeClass('has-error'); 
+        $('#deltav').parents('.form-group').removeClass('has-error');
+        $('#atmo').parents('.form-group').removeClass('has-error');
 
         if (bodies[$('#refbody').val()].atmo > 0) {
-            $('#refbody').parents('.form-group').addClass('has-warning'); 
+            $('#refbody').parents('.form-group').addClass('has-warning');
         } else {
-            $('#refbody').parents('.form-group').removeClass('has-warning'); 
+            $('#refbody').parents('.form-group').removeClass('has-warning');
         }
     });
 
     ['#payload', '#deltav', '#twr'].forEach(function(x){
         $(x).change(function(){
             if (parseFloat($(x).val()) > 0) {
-                $(x).parents('.form-group').removeClass('has-error'); 
+                $(x).parents('.form-group').removeClass('has-error');
             } else {
-                $(x).parents('.form-group').addClass('has-error'); 
+                $(x).parents('.form-group').addClass('has-error');
             }
         });
     });
@@ -665,23 +673,23 @@ $(document).ready(function() {
     $('#atmo').change(function(){
         var d = parseFloat($('#atmo').val());
         if (d >= 0 && d <= 100) {
-            $('#atmo').parents('.form-group').removeClass('has-error'); 
+            $('#atmo').parents('.form-group').removeClass('has-error');
         } else {
-            $('#atmo').parents('.form-group').addClass('has-error'); 
+            $('#atmo').parents('.form-group').addClass('has-error');
         }
     });
 
     $('#maxengines').change(function(){
         var e = parseInt($('#maxengines').val());
         if (e > 0 && e < 7) {
-            $('#maxengines').parents('.form-group').removeClass('has-error'); 
-            $('#maxengines').parents('.form-group').removeClass('has-warning'); 
+            $('#maxengines').parents('.form-group').removeClass('has-error');
+            $('#maxengines').parents('.form-group').removeClass('has-warning');
         } else if (e > 6 && e < 9) {
-            $('#maxengines').parents('.form-group').removeClass('has-error'); 
-            $('#maxengines').parents('.form-group').addClass('has-warning'); 
+            $('#maxengines').parents('.form-group').removeClass('has-error');
+            $('#maxengines').parents('.form-group').addClass('has-warning');
         } else {
-            $('#maxengines').parents('.form-group').removeClass('has-warning'); 
-            $('#maxengines').parents('.form-group').addClass('has-error'); 
+            $('#maxengines').parents('.form-group').removeClass('has-warning');
+            $('#maxengines').parents('.form-group').addClass('has-error');
         }
     });
 
