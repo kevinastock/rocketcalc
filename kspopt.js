@@ -42,7 +42,7 @@ function Part(name, size, deadend, cost, mass, fuel, thrust, iatm, ivac, gimbal,
     this.selector  = false;
 }
 
-function Result (engine_counts, tank, tank_count, dv, mass, cost, fuel_mass, fuel_used, shutdown) {
+function Result(engine_counts, tank, tank_count, dv, mass, cost, fuel_mass, fuel_used, shutdown) {
     this.engine_counts = engine_counts;
     this.tank          = tank;
     this.tank_count    = tank_count;
@@ -56,13 +56,13 @@ function Result (engine_counts, tank, tank_count, dv, mass, cost, fuel_mass, fue
 }
 
 var awards = [
-{ name:'&#9733; Lowest cost with full tanks',         lookup: function (x) { return x.cost; },               reduce: Math.min, initial: Number.POSITIVE_INFINITY },
-{ name:'&#9733; Lowest wet mass',                     lookup: function (x) { return x.mass; },               reduce: Math.min, initial: Number.POSITIVE_INFINITY },
-{ name:'&#9733; Lowest dry mass',                     lookup: function (x) { return x.mass - x.fuel_mass; }, reduce: Math.min, initial: Number.POSITIVE_INFINITY },
-{ name:'&#9733; Least fuel burned for requested Δv',  lookup: function (x) { return x.fuel_used; },          reduce: Math.min, initial: Number.POSITIVE_INFINITY }
+    {name: '&#9733; Lowest cost with full tanks',         lookup: function (x) { return x.cost; },               reduce: Math.min, initial: Number.POSITIVE_INFINITY},
+    {name: '&#9733; Lowest wet mass',                     lookup: function (x) { return x.mass; },               reduce: Math.min, initial: Number.POSITIVE_INFINITY},
+    {name: '&#9733; Lowest dry mass',                     lookup: function (x) { return x.mass - x.fuel_mass; }, reduce: Math.min, initial: Number.POSITIVE_INFINITY},
+    {name: '&#9733; Least fuel burned for requested Δv',  lookup: function (x) { return x.fuel_used; },          reduce: Math.min, initial: Number.POSITIVE_INFINITY}
 ];
 
-function Shutdown (engine_counts, engine, count, stage_dv, burn_time, init_mass, end_mass, init_TWRg, end_TWRg) {
+function Shutdown(engine_counts, engine, count, stage_dv, burn_time, init_mass, end_mass, init_TWRg, end_TWRg) {
     this.engine_counts = engine_counts;
     this.engine        = engine;
     this.count         = count;
@@ -78,24 +78,24 @@ function Shutdown (engine_counts, engine, count, stage_dv, burn_time, init_mass,
  * Engines
  */
 var all_engines = {
-    Stock:[
-        new Part( "Rockomax 24-77",                              0, true , 480,   0.09, 0,  20,   250, 300, 1.0, [] ),
-        new Part( "Rockomax Mark 55 Radial Mount Liquid Engine", 0, true , 850,   0.9,  0,  120,  290, 320, 3.0, [] ),
-        new Part( "LV-1 Liquid Fuel Engine",                     1, false, 350,   0.03, 0,  4,    220, 290, 0,   [] ),
-        new Part( "Rockomax 48-7S",                              1, false, 300,   0.1,  0,  30,   300, 350, 1.0, [] ),
-        new Part( "LV-T30 Liquid Fuel Engine",                   2, false, 850,   1.25, 0,  215,  320, 370, 0,   [] ),
-        new Part( "LV-T45 Liquid Fuel Engine",                   2, false, 950,   1.5,  0,  200,  320, 370, 1.0, [] ),
-        new Part( "LV-909 Liquid Fuel Engine",                   2, false, 750,   0.5,  0,  50,   300, 390, 0.5, [] ),
-        new Part( "R.A.P.I.E.R. Engine",                         2, false, 3600,  1.2,  0,  175,  320, 360, 3.0, [] ),
-        new Part( "Toroidal Aerospike Rocket",                   2, true , 3850,  1.5,  0,  175,  388, 390, 0,   [] ),
-        new Part( "LV-N Atomic Rocket Motor",                    2, false, 8700,  2.25, 0,  60,   220, 800, 1.0, [] ),
-        new Part( "Rockomax 'Poodle' Liquid Engine",             3, false, 1600,  2,    0,  220,  270, 390, 2.5, [] ),
-        new Part( "Rockomax 'Mainsail' Liquid Engine",           3, false, 5650,  6,    0,  1500, 320, 360, 1.0, [] ),
-        new Part( "Rockomax 'Skipper' Liquid Engine",            3, false, 2850,  3,    0,  650,  320, 370, 1.0, [] ),
-        new Part( "LFB KR-1x2",                                  3, true , 16400, 10,   32, 2000, 290, 340, 0.5, [] ),
-        new Part( "Kerbodyne KR-2L Advanced Engine",             4, false, 20850, 6.5,  0,  2500, 280, 380, 1.0, [] ),
-        new Part( "S3 KS-25x4 Engine Cluster",                   4, true , 32400, 9.75, 0,  3200, 320, 360, 0.5, [] )
-        ],
+    Stock: [
+        new Part("Rockomax 24-77",                              0, true,  480,   0.09, 0,  20,   250, 300, 1.0, []),
+        new Part("Rockomax Mark 55 Radial Mount Liquid Engine", 0, true,  850,   0.9,  0,  120,  290, 320, 3.0, []),
+        new Part("LV-1 Liquid Fuel Engine",                     1, false, 350,   0.03, 0,  4,    220, 290, 0,   []),
+        new Part("Rockomax 48-7S",                              1, false, 300,   0.1,  0,  30,   300, 350, 1.0, []),
+        new Part("LV-T30 Liquid Fuel Engine",                   2, false, 850,   1.25, 0,  215,  320, 370, 0,   []),
+        new Part("LV-T45 Liquid Fuel Engine",                   2, false, 950,   1.5,  0,  200,  320, 370, 1.0, []),
+        new Part("LV-909 Liquid Fuel Engine",                   2, false, 750,   0.5,  0,  50,   300, 390, 0.5, []),
+        new Part("R.A.P.I.E.R. Engine",                         2, false, 3600,  1.2,  0,  175,  320, 360, 3.0, []),
+        new Part("Toroidal Aerospike Rocket",                   2, true,  3850,  1.5,  0,  175,  388, 390, 0,   []),
+        new Part("LV-N Atomic Rocket Motor",                    2, false, 8700,  2.25, 0,  60,   220, 800, 1.0, []),
+        new Part("Rockomax 'Poodle' Liquid Engine",             3, false, 1600,  2,    0,  220,  270, 390, 2.5, []),
+        new Part("Rockomax 'Mainsail' Liquid Engine",           3, false, 5650,  6,    0,  1500, 320, 360, 1.0, []),
+        new Part("Rockomax 'Skipper' Liquid Engine",            3, false, 2850,  3,    0,  650,  320, 370, 1.0, []),
+        new Part("LFB KR-1x2",                                  3, true,  16400, 10,   32, 2000, 290, 340, 0.5, []),
+        new Part("Kerbodyne KR-2L Advanced Engine",             4, false, 20850, 6.5,  0,  2500, 280, 380, 1.0, []),
+        new Part("S3 KS-25x4 Engine Cluster",                   4, true,  32400, 9.75, 0,  3200, 320, 360, 0.5, [])
+    ]
 };
 
 /*
@@ -110,31 +110,31 @@ var all_engines = {
 
 
 var all_tanks = {
-    Stock:[
-        new Part( "Oscar-B Fuel Tank",          1, false, 180,  0.015,  0.063675, 0, 0, 0, 0, [] ),
-        new Part( "ROUND-8 Toroidal Fuel Tank", 1, false, 360,  0.025,  0.111,    0, 0, 0, 0, [] ),
-        new Part( "FL-T100 Fuel Tank",          3, false, 250,  0.0625, 0.5,      0, 0, 0, 0, [[8,1600], [2,425]] ),
-        new Part( "Kerbodyne S3-3600 Tank",     4, false, 7200, 2.5,    18.0,     0, 0, 0, 0, [[4,22800]] )
-        ],
+    Stock: [
+        new Part("Oscar-B Fuel Tank",          1, false, 180,  0.015,  0.063675, 0, 0, 0, 0, []),
+        new Part("ROUND-8 Toroidal Fuel Tank", 1, false, 360,  0.025,  0.111,    0, 0, 0, 0, []),
+        new Part("FL-T100 Fuel Tank",          3, false, 250,  0.0625, 0.5,      0, 0, 0, 0, [[8, 1600], [2, 425]]),
+        new Part("Kerbodyne S3-3600 Tank",     4, false, 7200, 2.5,    18.0,     0, 0, 0, 0, [[4, 22800]])
+    ]
 };
 
 var bodies = {
-    Moho   : { gravity:2.70,  atmo:0,   dv:1740 },
-    Eve    : { gravity:16.7,  atmo:100, dv:12000 },
-    Gilly  : { gravity:0.049, atmo:0,   dv:60 },
-    Kerbin : { gravity:9.81,  atmo:100, dv:4500 },
-    Mun    : { gravity:1.63,  atmo:0,   dv:1160 },
-    Minmus : { gravity:0.491, atmo:0,   dv:360 },
-    Duna   : { gravity:2.94,  atmo:20,  dv:1300 },
-    Ike    : { gravity:1.10,  atmo:0,   dv:780 },
-    Dres   : { gravity:1.13,  atmo:0,   dv:860 },
-    Jool   : { gravity:7.85,  atmo:100, dv:22000 },
-    Laythe : { gravity:7.85,  atmo:80,  dv:3200 },
-    Vall   : { gravity:2.31,  atmo:0,   dv:1720 },
-    Tylo   : { gravity:7.85,  atmo:0,   dv:4540 },
-    Bop    : { gravity:0.589, atmo:0,   dv:440 },
-    Pol    : { gravity:0.373, atmo:0,   dv:260 },
-    Eeloo  : { gravity:1.69,  atmo:0,   dv:1240 }
+    Moho   : {gravity: 2.70,  atmo: 0,   dv: 1740},
+    Eve    : {gravity: 16.7,  atmo: 100, dv: 12000},
+    Gilly  : {gravity: 0.049, atmo: 0,   dv: 60},
+    Kerbin : {gravity: 9.81,  atmo: 100, dv: 4500},
+    Mun    : {gravity: 1.63,  atmo: 0,   dv: 1160},
+    Minmus : {gravity: 0.491, atmo: 0,   dv: 360},
+    Duna   : {gravity: 2.94,  atmo: 20,  dv: 1300},
+    Ike    : {gravity: 1.10,  atmo: 0,   dv: 780},
+    Dres   : {gravity: 1.13,  atmo: 0,   dv: 860},
+    Jool   : {gravity: 7.85,  atmo: 100, dv: 22000},
+    Laythe : {gravity: 7.85,  atmo: 80,  dv: 3200},
+    Vall   : {gravity: 2.31,  atmo: 0,   dv: 1720},
+    Tylo   : {gravity: 7.85,  atmo: 0,   dv: 4540},
+    Bop    : {gravity: 0.589, atmo: 0,   dv: 440},
+    Pol    : {gravity: 0.373, atmo: 0,   dv: 260},
+    Eeloo  : {gravity: 1.69,  atmo: 0,   dv: 1240}
 };
 
 var g0_isp = 9.82;
@@ -143,30 +143,31 @@ var g0_isp = 9.82;
  * itertools replacements
  */
 function combinations_with_replacement(pool, r) {
-    var n = pool.length;
+    var n = pool.length, i, t, x, y, index = 0, indices = [], results = [];
 
-    if( r === 0 || n === 0 )
+    if (r === 0 || n === 0) {
         return [];
+    }
 
-    var index = 0;
-    var indices = [], results = [];
-
-    for(i=0;i<r;i++)
+    for (i = 0; i < r; i += 1) {
         indices[i] = 0;
+    }
 
     function produce() {
         results[index] = [];
-        for(var y=0;y<r;y++)
+        for (y = 0; y < r; y += 1) {
             results[index][y] = pool[indices[y]];
-        index++;
+        }
+        index += 1;
     }
     produce();
 
-    for (var i = r-1; i >= 0; i--) {
-        if (indices[i] != n - 1) {
-            var t = indices[i] + 1;
-            for (var x = i; x < r; x++)
+    for (i = r - 1; i >= 0; i -= 1) {
+        if (indices[i] !== n - 1) {
+            t = indices[i] + 1;
+            for (x = i; x < r; x += 1) {
                 indices[x] = t;
+            }
             produce();
             i = r;
         }
@@ -180,21 +181,20 @@ function groupby(items) {
         return [];
     }
 
-    var index = 0, count = 1;
-    var results = [];
-    var group = items[0];
+    var x, index = 0, count = 1, results = [], group = items[0];
 
-    for(var x=1;x<items.length;x++) {
-        if(group == items[x]) {
-            count++;
+    for (x = 1; x < items.length; x += 1) {
+        if (group === items[x]) {
+            count += 1;
         } else {
             // FIXME 'engine' should be a parameter for the users to rename
-            results[index++] = {engine:group, count:count};
+            results[index] = {engine: group, count: count};
+            index += 1;
             count = 1;
             group = items[x];
         }
     }
-    results[index] = {engine:group, count:count};
+    results[index] = {engine: group, count: count};
 
     return results;
 }
@@ -212,7 +212,7 @@ function sum(items, key) {
  */
 
 function adjusted_isp(engine, atmo) {
-    return engine.iatm*atmo + engine.ivac*(1-atmo);
+    return engine.iatm * atmo + engine.ivac * (1 - atmo);
 }
 
 function total_thrust(engine_counts) {
@@ -221,17 +221,19 @@ function total_thrust(engine_counts) {
 
 function exhaust_velocity(engine_counts, atmo) {
     var tt = total_thrust(engine_counts);
-    return g0_isp * tt / sum(engine_counts, function (x)
-            { return x.count * (x.engine.thrust * x.limit / adjusted_isp(x.engine, atmo)); });
+    return g0_isp * tt / sum(engine_counts, function (x) {
+        return x.count * (x.engine.thrust * x.limit / adjusted_isp(x.engine, atmo));
+    });
 }
 
 function required_tanks(payload, tank, engine_counts, atmo, dv) {
     // Compute ideal mass of tank and round up to nearest number of real tanks
-    var ve = exhaust_velocity(engine_counts, atmo);
-    var eexp = Math.exp( dv / ve );
-    var f = tank.mass / (tank.mass + tank.fuel);
-    var dead_weight = payload + sum(engine_counts, function (x) { return x.engine.mass * x.count; });
-    var ideal_mass = dead_weight * (1 - eexp) / (f * eexp - 1);
+    var ve, eexp, f, dead_weight, ideal_mass;
+    ve = exhaust_velocity(engine_counts, atmo);
+    eexp = Math.exp(dv / ve);
+    f = tank.mass / (tank.mass + tank.fuel);
+    dead_weight = payload + sum(engine_counts, function (x) { return x.engine.mass * x.count; });
+    ideal_mass = dead_weight * (1 - eexp) / (f * eexp - 1);
     return Math.ceil(ideal_mass / (tank.mass + tank.fuel));
 }
 
@@ -242,21 +244,21 @@ function required_tanks(payload, tank, engine_counts, atmo, dv) {
 function sorted_copy(engine_counts, atmo) {
     // copy engine_counts so counts can be modified
     var ec = $.map(engine_counts, function (x) { return $.extend({}, x); });
-    ec.sort(function (a,b) { return adjusted_isp(a.engine, atmo) - adjusted_isp(b.engine, atmo); });
+    ec.sort(function (a, b) { return adjusted_isp(a.engine, atmo) - adjusted_isp(b.engine, atmo); });
     return ec;
 }
 
 function limit_engine_thrust(engine_counts, wet_mass, TWRg, atmo) {
-    if (engine_counts.length == 1)
+    if (engine_counts.length === 1) {
         return engine_counts;
+    }
 
-    var limited = sorted_copy(engine_counts, atmo);
+    var limited, extra_dv, lowest, lowest_thrust;
 
-    var tt = total_thrust(limited);
-    var extra_dv = tt - TWRg * wet_mass;
-
-    var lowest = limited[0];
-    var lowest_thrust = lowest.engine.thrust * lowest.count;
+    limited = sorted_copy(engine_counts, atmo);
+    extra_dv = total_thrust(limited) - TWRg * wet_mass;
+    lowest = limited[0];
+    lowest_thrust = lowest.engine.thrust * lowest.count;
 
     // Bump to prevent the new limit causes thrust to be less than TWRg
     lowest.limit = Math.max(0, Math.min(1, ((lowest_thrust - extra_dv) / lowest_thrust) + 0.0000001));
@@ -271,17 +273,15 @@ function shutdown_schedule(wet_mass, dry_mass, engine_counts, atmo, dv, TWRg) {
     // assumption, but irrelevant since there's probably only two types of
     // engines anyways
 
-    var shutdown_sequence = [];
-    var current_mass = wet_mass;
-    var total_dv = 0;
+    var shutdown_sequence = [], current_mass = wet_mass, total_dv = 0, tt, ve, next_thrust, next_wet_mass, stage_dv, burn_time, init_TWRg, end_TWRg;
 
-    engine_counts.slice(0, -1).forEach( function(current) {
-        var engine = current.engine;
+    engine_counts.slice(0, -1).forEach(function (current) {
+        var step, engine = current.engine;
 
         // Number of engines to shutdown per stage
-        var step = 1;
+        step = 1;
         if (current.count > 1) {
-            for (step = 2; step <= current.count; step++) {
+            for (step = 2; step <= current.count; step += 1) {
                 if (step % current.count === 0) {
                     break;
                 }
@@ -289,22 +289,23 @@ function shutdown_schedule(wet_mass, dry_mass, engine_counts, atmo, dv, TWRg) {
         }
 
         while (current.count > 0) {
-            var tt = total_thrust(engine_counts);
-            var ve = exhaust_velocity(engine_counts, atmo);
+            tt = total_thrust(engine_counts);
+            ve = exhaust_velocity(engine_counts, atmo);
 
             // Amount of fuel which must be burned so next 'stage' works
-            var next_thrust = tt - engine.thrust * current.limit * step;
-            var next_wet_mass = next_thrust / TWRg;
+            next_thrust = tt - engine.thrust * current.limit * step;
+            next_wet_mass = next_thrust / TWRg;
 
             // Check if the next stage could actually work
-            if (next_wet_mass <= dry_mass || current_mass < next_wet_mass)
+            if (next_wet_mass <= dry_mass || current_mass < next_wet_mass) {
                 break;
+            }
 
             // Stats about this burn
-            var stage_dv = ve * Math.log(current_mass / next_wet_mass);
-            var burn_time = (current_mass - next_wet_mass) / (tt / ve);
-            var init_TWRg = tt / current_mass;
-            var end_TWRg = tt / next_wet_mass;
+            stage_dv = ve * Math.log(current_mass / next_wet_mass);
+            burn_time = (current_mass - next_wet_mass) / (tt / ve);
+            init_TWRg = tt / current_mass;
+            end_TWRg = tt / next_wet_mass;
 
             if (total_dv + stage_dv >= dv) {
                 // return now, this stage shuts down after goal dv
@@ -319,7 +320,7 @@ function shutdown_schedule(wet_mass, dry_mass, engine_counts, atmo, dv, TWRg) {
             total_dv += stage_dv;
 
             // Remove the engines that are being shutdown
-            current.count -= step ;
+            current.count -= step;
         }
     });
 
@@ -327,17 +328,15 @@ function shutdown_schedule(wet_mass, dry_mass, engine_counts, atmo, dv, TWRg) {
 }
 
 function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting) {
-    var best;
+    var best, dry_mass, wet_mass, limited_engines, shutdown_sequence, staged_dv, stage_mass, final_engines, ssret, last_thrust, last_ve, requested_dv, last_eexp, fuel_mass, stage_dv, actual_dv, requested_fuel, requested_burn_time, init_TWRg, end_TWRg, fuel_used, cost, tmp_count;
 
     function mass_summer(x) { return x.engine.mass * x.count; }
     function fuel_summer(x) { return x.engine.fuel * x.count; }
     function cost_summer(x) { return x.engine.cost * x.count; }
 
     while (tank_count >= 0) {
-        var dry_mass = payload  + sum(engine_counts, mass_summer) + tank.mass * tank_count;
-        var wet_mass = dry_mass + sum(engine_counts, fuel_summer) + tank.fuel * tank_count;
-
-        var limited_engines;
+        dry_mass = payload  + sum(engine_counts, mass_summer) + tank.mass * tank_count;
+        wet_mass = dry_mass + sum(engine_counts, fuel_summer) + tank.fuel * tank_count;
 
         if (allow_limiting) {
             limited_engines = limit_engine_thrust(engine_counts, wet_mass, TWRg, atmo);
@@ -345,13 +344,12 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
             limited_engines = engine_counts;
         }
 
-        if (total_thrust(limited_engines) / wet_mass < TWRg)
+        if (total_thrust(limited_engines) / wet_mass < TWRg) {
             break;
-
-        var shutdown_sequence, staged_dv, stage_mass, final_engines;
+        }
 
         if (allow_shutdown) {
-            var ssret = shutdown_schedule(wet_mass, dry_mass, limited_engines, atmo, dv, TWRg);
+            ssret = shutdown_schedule(wet_mass, dry_mass, limited_engines, atmo, dv, TWRg);
             shutdown_sequence = ssret[0];
             staged_dv         = ssret[1];
             stage_mass        = ssret[2];
@@ -364,33 +362,31 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
         }
 
         // Compute statistics on the last 'stage' of flight
-        var last_thrust = total_thrust(final_engines);
-        var last_ve = exhaust_velocity(final_engines, atmo);
-        var requested_dv = dv - staged_dv;
-        var last_eexp = Math.exp( requested_dv / last_ve );
-
-        //var stage_fuel_mass = stage_mass - dry_mass;
-        var fuel_mass = wet_mass - dry_mass;
-
-        var stage_dv = last_ve * Math.log(stage_mass / dry_mass);
-        var actual_dv = stage_dv + staged_dv;
-        var requested_fuel = stage_mass * (last_eexp - 1) / last_eexp;
-        var requested_burn_time = requested_fuel / (last_thrust / last_ve);
+        last_thrust = total_thrust(final_engines);
+        last_ve = exhaust_velocity(final_engines, atmo);
+        requested_dv = dv - staged_dv;
+        last_eexp = Math.exp(requested_dv / last_ve);
+        fuel_mass = wet_mass - dry_mass;
+        stage_dv = last_ve * Math.log(stage_mass / dry_mass);
+        actual_dv = stage_dv + staged_dv;
+        requested_fuel = stage_mass * (last_eexp - 1) / last_eexp;
+        requested_burn_time = requested_fuel / (last_thrust / last_ve);
 
         // LFB + DUMMY may not have sufficient dv, or tank count too low
-        if (actual_dv  < dv)
+        if (actual_dv  < dv) {
             break;
+        }
 
-        var init_TWRg = last_thrust / stage_mass;
-        var end_TWRg = last_thrust / dry_mass;
+        init_TWRg = last_thrust / stage_mass;
+        end_TWRg = last_thrust / dry_mass;
 
         // fuel needed for requested dv only
-        var fuel_used = requested_fuel + wet_mass - stage_mass;
+        fuel_used = requested_fuel + wet_mass - stage_mass;
 
         // Cost of the tanks and engines
-        var cost = sum(limited_engines, cost_summer);
-        var tmp_count = tank_count;
-        tank.cost_save.forEach( function (x) {
+        cost = sum(limited_engines, cost_summer);
+        tmp_count = tank_count;
+        tank.cost_save.forEach(function (x) {
             cost += Math.floor(tmp_count / x[0]) * x[1];
             tmp_count %= x[0];
         });
@@ -406,53 +402,54 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
 }
 
 function solve(payload, dv, TWRg, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks) {
-    var results = [];
+    var results = [], num_engines, engine_counts, thrusts;
     // Loop through the number of allowed engines
-    for(var num_engines=1; num_engines <= max_engines; num_engines++) {
+    for (num_engines = 1; num_engines <= max_engines; num_engines += 1) {
         // Loop through the sets of engines
-        combinations_with_replacement(engines, num_engines).forEach( function (engine_set) {
-            var engine_counts = groupby(engine_set);
-            engine_counts.forEach( function (x) { x.limit = 1; });
-            var thrusts = $.map(engine_counts, function (x) { return x.engine.thrust; });
+        combinations_with_replacement(engines, num_engines).forEach(function (engine_set) {
+            engine_counts = groupby(engine_set);
+            engine_counts.forEach(function (x) { x.limit = 1; });
+            thrusts = $.map(engine_counts, function (x) { return x.engine.thrust; });
             if (
                 // At most one type of engine with only 1
-                sum(engine_counts, function (x) { return x.count == 1 ? 1 : 0; }) <= 1 &&
+                sum(engine_counts, function (x) { return x.count === 1 ? 1 : 0; }) <= 1 &&
                 // Radial engines must have 0 or 2+
-                engine_counts.every(function (x) { return x.engine.size !== 0 || x.count != 1; }) &&
+                engine_counts.every(function (x) { return x.engine.size !== 0 || x.count !== 1; }) &&
                 // Limit difference between biggest and smallet engine thrust
                 Math.max.apply(null, thrusts) / Math.min.apply(null, thrusts) <= max_thrust_ratio &&
                 // Prevent 1x engine from being a deadend (no node on engine)
-                !(!allow_deadend && engine_counts.some(function (x) { return x.engine.deadend && x.count == 1; }))) {
+                !(!allow_deadend && engine_counts.some(function (x) { return x.engine.deadend && x.count === 1; }))
+            ) {
 
-                    tanks.forEach( function (tank) {
-                        // Tanks must be same or bigger than biggest engine
-                        if (any_tanks || Math.max.apply(null, $.map(engine_counts, function (x) { return x.engine.size; })) <= tank.size) {
-                            var tank_count;
-                            if (tank.mass === 0) {
-                                tank_count = 0;
-                            } else {
-                                tank_count = required_tanks(payload, tank, engine_counts, atmo, dv);
-                            }
-
-                            var best = optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting);
-                            if (best) {
-                                results.push(best);
-                            }
+                tanks.forEach(function (tank) {
+                    // Tanks must be same or bigger than biggest engine
+                    if (any_tanks || Math.max.apply(null, $.map(engine_counts, function (x) { return x.engine.size; })) <= tank.size) {
+                        var tank_count, best;
+                        if (tank.mass === 0) {
+                            tank_count = 0;
+                        } else {
+                            tank_count = required_tanks(payload, tank, engine_counts, atmo, dv);
                         }
-                    });
-                }
+
+                        best = optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting);
+                        if (best) {
+                            results.push(best);
+                        }
+                    }
+                });
+            }
         });
     }
 
-    if (results.length === 0)
+    if (results.length === 0) {
         return [];
+    }
 
-    awards.forEach( function (award) {
-        var best;
-        var best_score = award.initial;
-        results.forEach( function (rocket) {
+    awards.forEach(function (award) {
+        var best, best_score = award.initial;
+        results.forEach(function (rocket) {
             var score = award.lookup(rocket);
-            if (score == award.reduce(score, best_score)) {
+            if (score === award.reduce(score, best_score)) {
                 best = rocket;
                 best_score = score;
             }
@@ -468,38 +465,36 @@ function solve(payload, dv, TWRg, atmo, max_engines, max_thrust_ratio, allow_dea
  * Interface
  */
 
-function generate_results() {
-    $('#results').animate({height:'hide'}, 300, generate_results_inner);
-}
-
 function generate_results_inner() {
     if ($('.has-error').length) {
         $('#results').html("<div class='alert alert-danger h3' role='alert'>Invalid Flight Parameters <small>Nobody understands Jeb's requirements</small></div>");
-        $('#results').animate({height:'show'}, 300);
+        $('#results').animate({height: 'show'}, 300);
         return;
     }
 
+    var payload, dv, twr, atmo, max_engines, gimbal, allow_deadend, allow_shutdown, allow_limiting, any_tanks, body, max_thrust_ratio, g0, engines, tanks, results, html;
+
     // Read the data in
-    var payload         = parseFloat($('#payload').val());
-    var dv              = parseFloat($('#deltav').val());
-    var twr             = parseFloat($('#twr').val());
-    var atmo            = parseFloat($('#atmo').val()) / 100;
-    var max_engines     = parseInt($('#maxengines').val());
-    var gimbal          = $('#gimbal').prop('checked');
-    var allow_deadend   = !$('#deadend').prop('checked');
-    var allow_shutdown  = !$('#shutdown').prop('checked');
-    var allow_limiting  = !$('#limiting').prop('checked');
-    var any_tanks       = $('#littletanks').prop('checked');
-    var body            = $('#refbody').val();
+    payload         = parseFloat($('#payload').val());
+    dv              = parseFloat($('#deltav').val());
+    twr             = parseFloat($('#twr').val());
+    atmo            = parseFloat($('#atmo').val()) / 100;
+    max_engines     = parseInt($('#maxengines').val(), 10);
+    gimbal          = $('#gimbal').prop('checked');
+    allow_deadend   = !$('#deadend').prop('checked');
+    allow_shutdown  = !$('#shutdown').prop('checked');
+    allow_limiting  = !$('#limiting').prop('checked');
+    any_tanks       = $('#littletanks').prop('checked');
+    body            = $('#refbody').val();
 
-    var max_thrust_ratio = 25;
-    var g0 = bodies[body].gravity;
+    max_thrust_ratio = 25;
+    g0 = bodies[body].gravity;
 
-    var engines = [];
-    var tanks = [new Part("DUMMY TANK", 4, false, 0, 0, 0, 0, 0, 0, 0, [])];
+    engines = [];
+    tanks = [new Part("DUMMY TANK", 4, false, 0, 0, 0, 0, 0, 0, 0, [])];
 
     // Construct the set of engines and tanks to consider
-    $.each(all_engines, function (k,v) {
+    $.each(all_engines, function (k, v) {
         v.forEach(function (part) {
             if ($(part.selector).prop('checked')) {
                 // Only engines with gimbal if requested
@@ -510,7 +505,7 @@ function generate_results_inner() {
         });
     });
 
-    $.each(all_tanks, function (k,v) {
+    $.each(all_tanks, function (k, v) {
         v.forEach(function (part) {
             if ($(part.selector).prop('checked')) {
                 tanks.push(part);
@@ -519,28 +514,28 @@ function generate_results_inner() {
     });
 
     // Solve!
-    var results = solve(payload, dv, twr * g0, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks);
+    results = solve(payload, dv, twr * g0, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks);
 
     // Generate output html
-    var html = "<div class='header'><h4 class='text-muted'>Rockets</h3></div>";
+    html = "<div class='header'><h4 class='text-muted'>Rockets</h3></div>";
 
     if (results.length === 0) {
         html += '<div class="alert alert-danger h3" role="alert">No Solutions <small>even Kerbal science has its limits</small></div>';
     }
 
-    results.forEach(function(r){
+    results.forEach(function (r) {
         html += "<div class='panel panel-default panel-primary'><div class='panel-heading'><strong>";
 
-        r.engine_counts.forEach(function(e){
-            var limit = Math.floor(e.limit*100+0.5);
+        r.engine_counts.forEach(function (e) {
+            var limit = Math.floor(e.limit * 100 + 0.5);
             html += e.count + 'x ' + e.engine.name;
-            if (limit != 100) {
+            if (limit !== 100) {
                 html += ' (Thrust Limiter: ' + limit + '%)';
             }
             html += "<br/>";
         });
 
-        if (r.tank != tanks[0]) {
+        if (r.tank !== tanks[0]) {
             html += r.tank_count + 'x ' + r.tank.name;
         }
 
@@ -550,17 +545,17 @@ function generate_results_inner() {
         html += '<td>' + r.dv.toFixed(2) + ' m/s</td>';
         html += '<td>' + r.cost + '</td>';
         html += '<td>' + r.mass.toFixed(2) + ' t</td>';
-        html += '<td>' + (r.mass-r.fuel_mass).toFixed(2) + ' t</td>';
+        html += '<td>' + (r.mass - r.fuel_mass).toFixed(2) + ' t</td>';
 
         html += '</tr></tbody></table></div>';
         //html += '<br/><div class="header"><h5 class="text-muted">Flight Plan</h5></div>'
         html += '<br/>';
 
         html += '<div class="table-responsive"><table class="table"><thead><tr> <th>Phase</th> <th>Phase Δv</th> <th>TWR</th> <th>Fuel Burned</th> <th>Burn Time</th> <th>Shutdown Mass</th> </tr></thead> <tbody>';
-        r.shutdown.forEach(function(s, i){
-            html += '<tr><td>' + (i+1) + '</td>';
+        r.shutdown.forEach(function (s, i) {
+            html += '<tr><td>' + (i + 1) + '</td>';
             html += '<td>' + s.stage_dv.toFixed(2) + ' m/s</td>';
-            html += '<td>' + (s.init_TWRg/g0).toFixed(2) + ' (' + (s.end_TWRg/g0).toFixed(2) + ' max)</td>';
+            html += '<td>' + (s.init_TWRg / g0).toFixed(2) + ' (' + (s.end_TWRg / g0).toFixed(2) + ' max)</td>';
             html += '<td>' + (s.init_mass - s.end_mass).toFixed(2) + ' t</td>';
             html += '<td>' + s.burn_time.toFixed(2) + ' s </td>';
             html += '<td>' + s.end_mass.toFixed(2) + ' t </td></tr>';
@@ -572,7 +567,7 @@ function generate_results_inner() {
 
         html += "</table></div><ul class='list-group'>";
 
-        r.awards.forEach(function(award){
+        r.awards.forEach(function (award) {
             html += "<li class='list-group-item list-group-item-info'>" + award.name + "</li>";
         });
 
@@ -582,18 +577,22 @@ function generate_results_inner() {
     $('#results').html(html);
     // setTimeout was needed to stop jquery from doing the animation wrong when
     // the script takes longer than the animation
-    setTimeout(function(){$('#results').animate({height:'show'}, 300);}, 0);
+    setTimeout(function () { $('#results').animate({height: 'show'}, 300); }, 0);
 }
 
-$(document).ready(function() {
+function generate_results() {
+    $('#results').animate({height: 'hide'}, 300, generate_results_inner);
+}
+
+$(document).ready(function () {
     // Initialize reference bodies
-    $.each(bodies, function (k,v) {
-        $('#refbody').append($("<option></option>").prop("value",k).text(k));
+    $.each(bodies, function (k, v) {
+        $('#refbody').append($("<option></option>").prop("value", k).text(k));
     });
 
     function initalize_checkboxlist(data, key) {
         var html = '<ul>';
-        $.each(data, function (k,v) {
+        $.each(data, function (k, v) {
             html += '<li><label class="checkbox" for="' + key + '-' + k + '"> <input name="' + key + 's" id="' + key + '-' + k + '" value="' + k + '" type="checkbox">' + k + '</label><ul>';
 
             v.forEach(function (part, i) {
@@ -613,16 +612,16 @@ $(document).ready(function() {
     // Enable nested checkboxes
     $.extend($.expr[':'], {
         unchecked: function (obj) {
-            return ((obj.type == 'checkbox' || obj.type == 'radio') && !$(obj).is(':checked'));
+            return ((obj.type === 'checkbox' || obj.type === 'radio') && !$(obj).is(':checked'));
         }
     });
 
-    $(".nestedcb input:checkbox").change( function () {
+    $(".nestedcb input:checkbox").change(function () {
         $(this).parent().next('ul').find('label > input:checkbox').prop('checked', $(this).prop('checked'));
 
         // FIXME: not working, when a checkbox chages, make sure all parents are correct
         /*
-         * for (var i = $('.nestedcb').find('ul').length - 1; i >= 0; i--) {
+         * for (var i = $('.nestedcb').find('ul').length - 1; i >= 0; i -= 1) {
          *     $('.nestedcb').find('ul:eq(' + i + ')').prev('label > input:checkbox').prop('checked', function () {
          *         return $(this).parent().next('ul').find('label > input:unchecked').length === 0 ? true : false;
          *     });
@@ -631,24 +630,25 @@ $(document).ready(function() {
     });
 
     // Make advanced options easier to click
-    $('#collapseOneToggle').click(function(){$('#collapseOne').collapse('toggle');});
+    $('#collapseOneToggle').click(function () { $('#collapseOne').collapse('toggle'); });
     var hoverstate;
     $('#collapseOneToggle').hover(
-        function(){
+        function () {
             var link = $('a[href="#collapseOne"]');
             hoverstate = link.css('text-decoration');
             link.css('text-decoration', 'underline');
         },
-        function(){
+        function () {
             var link = $('a[href="#collapseOne"]');
             link.css('text-decoration', hoverstate);
-        });
+        }
+    );
 
 
     // Form validation
-    $('#refbody').change(function(){
+    $('#refbody').change(function () {
         $('#deltav').val(bodies[$('#refbody').val()].dv);
-        $('#atmo').val(bodies[$('#refbody').val()].atmo/2);
+        $('#atmo').val(bodies[$('#refbody').val()].atmo / 2);
         $('#deltav').parents('.form-group').removeClass('has-error');
         $('#atmo').parents('.form-group').removeClass('has-error');
 
@@ -659,8 +659,8 @@ $(document).ready(function() {
         }
     });
 
-    ['#payload', '#deltav', '#twr'].forEach(function(x){
-        $(x).change(function(){
+    ['#payload', '#deltav', '#twr'].forEach(function (x) {
+        $(x).change(function () {
             if (parseFloat($(x).val()) > 0) {
                 $(x).parents('.form-group').removeClass('has-error');
             } else {
@@ -669,7 +669,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#atmo').change(function(){
+    $('#atmo').change(function () {
         var d = parseFloat($('#atmo').val());
         if (d >= 0 && d <= 100) {
             $('#atmo').parents('.form-group').removeClass('has-error');
@@ -678,8 +678,8 @@ $(document).ready(function() {
         }
     });
 
-    $('#maxengines').change(function(){
-        var e = parseInt($('#maxengines').val());
+    $('#maxengines').change(function () {
+        var e = parseInt($('#maxengines').val(), 10);
         if (e > 0 && e < 7) {
             $('#maxengines').parents('.form-group').removeClass('has-error');
             $('#maxengines').parents('.form-group').removeClass('has-warning');
@@ -695,7 +695,7 @@ $(document).ready(function() {
     // Set defaults on load
     $('#refbody option[value="Mun"]').prop('selected', 'selected');
     $('#deltav').val(bodies[$('#refbody').val()].dv);
-    $('#atmo').val(bodies[$('#refbody').val()].atmo/3);
+    $('#atmo').val(bodies[$('#refbody').val()].atmo / 2);
     $('#payload').val("1");
     $('#twr').val("2.0");
     $('#maxengines').val("3");
