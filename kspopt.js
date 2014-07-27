@@ -22,7 +22,7 @@
  *     THE SOFTWARE.
  */
 
-"use strict";
+'use strict';
 
 // FIXME: limit max engines based on part selections
 // FIXME: read url at load to set parameters?
@@ -60,7 +60,7 @@ var awards = [
 { name:'&#9733; Lowest wet mass',                     lookup: function (x) { return x.mass; },               reduce: Math.min, initial: Number.POSITIVE_INFINITY },
 { name:'&#9733; Lowest dry mass',                     lookup: function (x) { return x.mass - x.fuel_mass; }, reduce: Math.min, initial: Number.POSITIVE_INFINITY },
 { name:'&#9733; Least fuel burned for requested Δv',  lookup: function (x) { return x.fuel_used; },          reduce: Math.min, initial: Number.POSITIVE_INFINITY }
-]
+];
 
 function Shutdown (engine_counts, engine, count, stage_dv, burn_time, init_mass, end_mass, init_TWRg, end_TWRg) {
     this.engine_counts = engine_counts;
@@ -96,7 +96,7 @@ var all_engines = {
         new Part( "Kerbodyne KR-2L Advanced Engine",             4, false, 20850, 6.5,  0,  2500, 280, 380, 1.0, [] ),
         new Part( "S3 KS-25x4 Engine Cluster",                   4, true , 32400, 9.75, 0,  3200, 320, 360, 0.5, [] )
         ],
-}
+};
 
 /*
  * Fuel Tanks
@@ -116,7 +116,7 @@ var all_tanks = {
         new Part( "FL-T100 Fuel Tank",          3, false, 250,  0.0625, 0.5,      0, 0, 0, 0, [[8,1600], [2,425]] ),
         new Part( "Kerbodyne S3-3600 Tank",     4, false, 7200, 2.5,    18.0,     0, 0, 0, 0, [[4,22800]] )
         ],
-}
+};
 
 var bodies = {
     Moho   : { gravity:2.70,  atmo:0,   dv:1740 },
@@ -145,7 +145,7 @@ var g0_isp = 9.82;
 function combinations_with_replacement(pool, r) {
     var n = pool.length;
 
-    if( r == 0 || n == 0 )
+    if( r === 0 || n === 0 )
         return [];
 
     var index = 0;
@@ -176,7 +176,7 @@ function combinations_with_replacement(pool, r) {
 }
 
 function groupby(items) {
-    if (items.length == 0) {
+    if (items.length === 0) {
         return [];
     }
 
@@ -212,7 +212,7 @@ function sum(items, key) {
  */
 
 function adjusted_isp(engine, atmo) {
-    return engine.iatm*atmo + engine.ivac*(1-atmo)
+    return engine.iatm*atmo + engine.ivac*(1-atmo);
 }
 
 function total_thrust(engine_counts) {
@@ -241,9 +241,9 @@ function required_tanks(payload, tank, engine_counts, atmo, dv) {
 
 function sorted_copy(engine_counts, atmo) {
     // copy engine_counts so counts can be modified
-    var engine_counts = $.map(engine_counts, function (x) { return $.extend({}, x); });
-    engine_counts.sort(function (a,b) { return adjusted_isp(a.engine, atmo) - adjusted_isp(b.engine, atmo); });
-    return engine_counts;
+    var ec = $.map(engine_counts, function (x) { return $.extend({}, x); });
+    ec.sort(function (a,b) { return adjusted_isp(a.engine, atmo) - adjusted_isp(b.engine, atmo); });
+    return ec;
 }
 
 function limit_engine_thrust(engine_counts, wet_mass, TWRg, atmo) {
@@ -282,7 +282,7 @@ function shutdown_schedule(wet_mass, dry_mass, engine_counts, atmo, dv, TWRg) {
         var step = 1;
         if (current.count > 1) {
             for (step = 2; step <= current.count; step++) {
-                if (step % current.count == 0) {
+                if (step % current.count === 0) {
                     break;
                 }
             }
@@ -329,9 +329,13 @@ function shutdown_schedule(wet_mass, dry_mass, engine_counts, atmo, dv, TWRg) {
 function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting) {
     var best;
 
+    function mass_summer(x) { return x.engine.mass * x.count; }
+    function fuel_summer(x) { return x.engine.fuel * x.count; }
+    function cost_summer(x) { return x.engine.cost * x.count; }
+
     while (tank_count >= 0) {
-        var dry_mass = payload  + sum(engine_counts, function (x) { return x.engine.mass * x.count; }) + tank.mass * tank_count;
-        var wet_mass = dry_mass + sum(engine_counts, function (x) { return x.engine.fuel * x.count; }) + tank.fuel * tank_count;
+        var dry_mass = payload  + sum(engine_counts, mass_summer) + tank.mass * tank_count;
+        var wet_mass = dry_mass + sum(engine_counts, fuel_summer) + tank.fuel * tank_count;
 
         var limited_engines;
 
@@ -341,11 +345,7 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
             limited_engines = engine_counts;
         }
 
-        var ve = exhaust_velocity(limited_engines, atmo);
-        var eexp = Math.exp( dv / ve );
-        var init_TWRg = total_thrust(limited_engines) / wet_mass, end_TWRg;
-
-        if (init_TWRg < TWRg)
+        if (total_thrust(limited_engines) / wet_mass < TWRg)
             break;
 
         var shutdown_sequence, staged_dv, stage_mass, final_engines;
@@ -369,7 +369,7 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
         var requested_dv = dv - staged_dv;
         var last_eexp = Math.exp( requested_dv / last_ve );
 
-        var stage_fuel_mass = stage_mass - dry_mass;
+        //var stage_fuel_mass = stage_mass - dry_mass;
         var fuel_mass = wet_mass - dry_mass;
 
         var stage_dv = last_ve * Math.log(stage_mass / dry_mass);
@@ -381,18 +381,18 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
         if (actual_dv  < dv)
             break;
 
-        init_TWRg = last_thrust / stage_mass;
-        end_TWRg = last_thrust / dry_mass;
+        var init_TWRg = last_thrust / stage_mass;
+        var end_TWRg = last_thrust / dry_mass;
 
         // fuel needed for requested dv only
         var fuel_used = requested_fuel + wet_mass - stage_mass;
 
         // Cost of the tanks and engines
-        var cost = sum(limited_engines, function (x) { return x.count * x.engine.cost; });
+        var cost = sum(limited_engines, cost_summer);
         var tmp_count = tank_count;
         tank.cost_save.forEach( function (x) {
             cost += Math.floor(tmp_count / x[0]) * x[1];
-            tmp_count %= x[0]
+            tmp_count %= x[0];
         });
         cost += tmp_count * tank.cost;
 
@@ -405,7 +405,7 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
     return best;
 }
 
-function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks) {
+function solve(payload, dv, TWRg, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks) {
     var results = [];
     // Loop through the number of allowed engines
     for(var num_engines=1; num_engines <= max_engines; num_engines++) {
@@ -413,13 +413,12 @@ function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, a
         combinations_with_replacement(engines, num_engines).forEach( function (engine_set) {
             var engine_counts = groupby(engine_set);
             engine_counts.forEach( function (x) { x.limit = 1; });
-            var d = new Date();
             var thrusts = $.map(engine_counts, function (x) { return x.engine.thrust; });
             if (
                 // At most one type of engine with only 1
                 sum(engine_counts, function (x) { return x.count == 1 ? 1 : 0; }) <= 1 &&
                 // Radial engines must have 0 or 2+
-                engine_counts.every(function (x) { return x.engine.size != 0 || x.count != 1; }) &&
+                engine_counts.every(function (x) { return x.engine.size !== 0 || x.count != 1; }) &&
                 // Limit difference between biggest and smallet engine thrust
                 Math.max.apply(null, thrusts) / Math.min.apply(null, thrusts) <= max_thrust_ratio &&
                 // Prevent 1x engine from being a deadend (no node on engine)
@@ -429,7 +428,7 @@ function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, a
                         // Tanks must be same or bigger than biggest engine
                         if (any_tanks || Math.max.apply(null, $.map(engine_counts, function (x) { return x.engine.size; })) <= tank.size) {
                             var tank_count;
-                            if (tank.mass == 0) {
+                            if (tank.mass === 0) {
                                 tank_count = 0;
                             } else {
                                 tank_count = required_tanks(payload, tank, engine_counts, atmo, dv);
@@ -445,7 +444,7 @@ function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, a
         });
     }
 
-    if (results.length == 0)
+    if (results.length === 0)
         return [];
 
     awards.forEach( function (award) {
@@ -520,17 +519,17 @@ function generate_results_inner() {
     });
 
     // Solve!
-    var results = solve(payload, dv, twr * g0, atmo, max_engines, gimbal, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks);
+    var results = solve(payload, dv, twr * g0, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks);
 
     // Generate output html
     var html = "<div class='header'><h4 class='text-muted'>Rockets</h3></div>";
 
-    if (results.length == 0) {
+    if (results.length === 0) {
         html += '<div class="alert alert-danger h3" role="alert">No Solutions <small>even Kerbal science has its limits</small></div>';
     }
 
     results.forEach(function(r){
-        html += "<div class='panel panel-default panel-primary'><div class='panel-heading'><strong>"
+        html += "<div class='panel panel-default panel-primary'><div class='panel-heading'><strong>";
 
         r.engine_counts.forEach(function(e){
             var limit = Math.floor(e.limit*100+0.5);
@@ -632,7 +631,7 @@ $(document).ready(function() {
     });
 
     // Make advanced options easier to click
-    $('#collapseOneToggle').click(function(){$('#collapseOne').collapse('toggle')});
+    $('#collapseOneToggle').click(function(){$('#collapseOne').collapse('toggle');});
     var hoverstate;
     $('#collapseOneToggle').hover(
         function(){
