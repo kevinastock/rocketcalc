@@ -469,12 +469,15 @@ function solve(payload, dv, TWRg, atmo, max_engines, gimbal, max_thrust_ratio, a
 /*
  * Interface
  */
-function generate_results() {
-    $('#results').hide();
 
+function generate_results() {
+    $('#results').animate({height:'hide'}, 300, generate_results_inner);
+}
+
+function generate_results_inner() {
     if ($('.has-error').length) {
         $('#results').html("<div class='alert alert-danger h3' role='alert'>Invalid Flight Parameters <small>Nobody understands Jeb's requirements</small></div>");
-        $('#results').show(400);
+        $('#results').animate({height:'show'}, 300);
         return;
     }
 
@@ -482,7 +485,7 @@ function generate_results() {
     var dv              = parseFloat($('#deltav').val());
     var twr             = parseFloat($('#twr').val());
     var atmo            = parseFloat($('#atmo').val()) / 100;
-    var max_engines     =   parseInt($('#maxengines').val());
+    var max_engines     = parseInt($('#maxengines').val());
     var gimbal          = $('#gimbal').prop('checked');
     var allow_deadend   = !$('#deadend').prop('checked');
     var allow_shutdown  = !$('#shutdown').prop('checked');
@@ -491,7 +494,6 @@ function generate_results() {
     var body            = $('#refbody').val();
 
     var max_thrust_ratio = 25;
-
     var g0 = bodies[body].gravity;
     
     var engines = [];
@@ -573,8 +575,7 @@ function generate_results() {
     });
 
     $('#results').html(html);
-    $('#results').show(400);
-    
+    setTimeout(function(){$('#results').animate({height:'show'}, 300);}, 0);
 }
 
 $(document).ready(function() {
