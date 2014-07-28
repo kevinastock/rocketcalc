@@ -630,16 +630,16 @@ $(document).ready(function () {
     });
 
     // Make advanced options easier to click
-    $('#collapseOneToggle').click(function () { $('#collapseOne').collapse('toggle'); });
+    $('#advanced-options-toggle').click(function () { $('#advanced-options').collapse('toggle'); });
     var hoverstate;
-    $('#collapseOneToggle').hover(
+    $('#advanced-options-toggle').hover(
         function () {
-            var link = $('a[href="#collapseOne"]');
+            var link = $('a[href="#advanced-options"]');
             hoverstate = link.css('text-decoration');
             link.css('text-decoration', 'underline');
         },
         function () {
-            var link = $('a[href="#collapseOne"]');
+            var link = $('a[href="#advanced-options"]');
             link.css('text-decoration', hoverstate);
         }
     );
