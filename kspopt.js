@@ -527,7 +527,7 @@ function generate_results_inner() {
         html += "<div class='panel panel-default panel-primary'><div class='panel-heading'><strong>";
 
         r.engine_counts.forEach(function (e) {
-            var limit = Math.floor(e.limit * 100 + 0.5);
+            var limit = Math.floor(e.limit * 200 + 0.5) / 2;
             html += e.count + 'x ' + e.engine.name;
             if (limit !== 100) {
                 html += ' (Thrust Limiter: ' + limit + '%)';
