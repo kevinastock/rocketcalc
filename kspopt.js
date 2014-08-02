@@ -27,7 +27,8 @@
 // FIXME: limit max engines based on part selections
 // FIXME: read url at load to set parameters?
 
-function Part(name, size, deadend, cost, mass, fuel, thrust, iatm, ivac, gimbal, cost_save) {
+function Part(type, name, size, deadend, cost, mass, fuel, thrust, iatm, ivac, gimbal, cost_save) {
+    this.type      = type;
     this.name      = name;
     this.size      = size;
     this.deadend   = deadend;
@@ -79,22 +80,23 @@ function Shutdown(engine_counts, engine, count, stage_dv, burn_time, init_mass, 
  */
 var all_engines = {
     Stock: [
-        new Part("Rockomax 24-77",                              0, true,  480,   0.09, 0,  20,   250, 300, 1.0, []),
-        new Part("Rockomax Mark 55 Radial Mount Liquid Engine", 0, true,  850,   0.9,  0,  120,  290, 320, 3.0, []),
-        new Part("LV-1 Liquid Fuel Engine",                     1, false, 350,   0.03, 0,  4,    220, 290, 0,   []),
-        new Part("Rockomax 48-7S",                              1, false, 300,   0.1,  0,  30,   300, 350, 1.0, []),
-        new Part("LV-T30 Liquid Fuel Engine",                   2, false, 850,   1.25, 0,  215,  320, 370, 0,   []),
-        new Part("LV-T45 Liquid Fuel Engine",                   2, false, 950,   1.5,  0,  200,  320, 370, 1.0, []),
-        new Part("LV-909 Liquid Fuel Engine",                   2, false, 750,   0.5,  0,  50,   300, 390, 0.5, []),
-        new Part("R.A.P.I.E.R. Engine",                         2, false, 3600,  1.2,  0,  175,  320, 360, 3.0, []),
-        new Part("Toroidal Aerospike Rocket",                   2, true,  3850,  1.5,  0,  175,  388, 390, 0,   []),
-        new Part("LV-N Atomic Rocket Motor",                    2, false, 8700,  2.25, 0,  60,   220, 800, 1.0, []),
-        new Part("Rockomax 'Poodle' Liquid Engine",             3, false, 1600,  2,    0,  220,  270, 390, 2.5, []),
-        new Part("Rockomax 'Mainsail' Liquid Engine",           3, false, 5650,  6,    0,  1500, 320, 360, 1.0, []),
-        new Part("Rockomax 'Skipper' Liquid Engine",            3, false, 2850,  3,    0,  650,  320, 370, 1.0, []),
-        new Part("LFB KR-1x2",                                  3, true,  16400, 10,   32, 2000, 290, 340, 0.5, []),
-        new Part("Kerbodyne KR-2L Advanced Engine",             4, false, 20850, 6.5,  0,  2500, 280, 380, 1.0, []),
-        new Part("S3 KS-25x4 Engine Cluster",                   4, true,  32400, 9.75, 0,  3200, 320, 360, 0.5, [])
+        new Part("mono", "O-10 MonoPropellant Engine",                  0, true,  800,   0.00, 0,  20,   220, 290, 0,   []),
+        new Part("LF/O", "Rockomax 24-77",                              0, true,  480,   0.09, 0,  20,   250, 300, 1.0, []),
+        new Part("LF/O", "Rockomax Mark 55 Radial Mount Liquid Engine", 0, true,  850,   0.9,  0,  120,  290, 320, 3.0, []),
+        new Part("LF/O", "LV-1 Liquid Fuel Engine",                     1, false, 350,   0.03, 0,  4,    220, 290, 0,   []),
+        new Part("LF/O", "Rockomax 48-7S",                              1, false, 300,   0.1,  0,  30,   300, 350, 1.0, []),
+        new Part("LF/O", "LV-T30 Liquid Fuel Engine",                   2, false, 850,   1.25, 0,  215,  320, 370, 0,   []),
+        new Part("LF/O", "LV-T45 Liquid Fuel Engine",                   2, false, 950,   1.5,  0,  200,  320, 370, 1.0, []),
+        new Part("LF/O", "LV-909 Liquid Fuel Engine",                   2, false, 750,   0.5,  0,  50,   300, 390, 0.5, []),
+        new Part("LF/O", "R.A.P.I.E.R. Engine",                         2, false, 3600,  1.2,  0,  175,  320, 360, 3.0, []),
+        new Part("LF/O", "Toroidal Aerospike Rocket",                   2, true,  3850,  1.5,  0,  175,  388, 390, 0,   []),
+        new Part("LF/O", "LV-N Atomic Rocket Motor",                    2, false, 8700,  2.25, 0,  60,   220, 800, 1.0, []),
+        new Part("LF/O", "Rockomax 'Poodle' Liquid Engine",             3, false, 1600,  2,    0,  220,  270, 390, 2.5, []),
+        new Part("LF/O", "Rockomax 'Mainsail' Liquid Engine",           3, false, 5650,  6,    0,  1500, 320, 360, 1.0, []),
+        new Part("LF/O", "Rockomax 'Skipper' Liquid Engine",            3, false, 2850,  3,    0,  650,  320, 370, 1.0, []),
+        new Part("LF/O", "LFB KR-1x2",                                  3, true,  16400, 10,   32, 2000, 290, 340, 0.5, []),
+        new Part("LF/O", "Kerbodyne KR-2L Advanced Engine",             4, false, 20850, 6.5,  0,  2500, 280, 380, 1.0, []),
+        new Part("LF/O", "S3 KS-25x4 Engine Cluster",                   4, true,  32400, 9.75, 0,  3200, 320, 360, 0.5, [])
     ]
 };
 
@@ -104,6 +106,7 @@ var all_engines = {
  * FL-T100 is considered large since we allow engines to be mounted to bigger
  * tanks, but not the opposite, and FL-T100 has the same fuel/mass as large
  *
+ * FL-R10 is better than FL-R25, considered size 2 instead to replace it
  * DUMMY TANK is used to simulate not adding tanks to LFB's
  */
 
@@ -111,10 +114,14 @@ var all_engines = {
 
 var all_tanks = {
     Stock: [
-        new Part("Oscar-B Fuel Tank",          1, false, 180,  0.015,  0.063675, 0, 0, 0, 0, []),
-        new Part("ROUND-8 Toroidal Fuel Tank", 1, false, 360,  0.025,  0.111,    0, 0, 0, 0, []),
-        new Part("FL-T100 Fuel Tank",          3, false, 250,  0.0625, 0.5,      0, 0, 0, 0, [[8, 1600], [2, 425]]),
-        new Part("Kerbodyne S3-3600 Tank",     4, false, 7200, 2.5,    18.0,     0, 0, 0, 0, [[4, 22800]])
+        new Part("mono", "Stratus-V Roundified Monopropellant Tank",   0, false, 400,  0.075,  0.16,     0, 0, 0, 0, []),
+        new Part("mono", "Stratus-V Cylindrified Monopropellant Tank", 0, false, 800,  0.15,   0.6,      0, 0, 0, 0, []),
+        new Part("mono", "FL-R10 RCS Fuel Tank",                       2, false, 400,  0.05,   0.2,      0, 0, 0, 0, []),
+        new Part("mono", "FL-R1 RCS Fuel Tank",                        3, false, 1300, 0.4,    3.0,      0, 0, 0, 0, []),
+        new Part("LF/O", "Oscar-B Fuel Tank",                          1, false, 180,  0.015,  0.063675, 0, 0, 0, 0, []),
+        new Part("LF/O", "ROUND-8 Toroidal Fuel Tank",                 1, false, 360,  0.025,  0.111,    0, 0, 0, 0, []),
+        new Part("LF/O", "FL-T100 Fuel Tank",                          3, false, 250,  0.0625, 0.5,      0, 0, 0, 0, [[8, 1600], [2, 425]]),
+        new Part("LF/O", "Kerbodyne S3-3600 Tank",                     4, false, 7200, 2.5,    18.0,     0, 0, 0, 0, [[4, 22800]])
     ]
 };
 
@@ -226,7 +233,7 @@ function exhaust_velocity(engine_counts, atmo) {
     });
 }
 
-function required_tanks(payload, tank, engine_counts, atmo, dv) {
+function required_tanks(payload, prefuel, tank, engine_counts, atmo, dv) {
     // Compute ideal mass of tank and round up to nearest number of real tanks
     var ve, eexp, f, dead_weight, ideal_mass;
     ve = exhaust_velocity(engine_counts, atmo);
@@ -234,7 +241,7 @@ function required_tanks(payload, tank, engine_counts, atmo, dv) {
     f = tank.mass / (tank.mass + tank.fuel);
     dead_weight = payload + sum(engine_counts, function (x) { return x.engine.mass * x.count; });
     ideal_mass = dead_weight * (1 - eexp) / (f * eexp - 1);
-    return Math.ceil(ideal_mass / (tank.mass + tank.fuel));
+    return Math.ceil((ideal_mass - prefuel) / (tank.mass + tank.fuel));
 }
 
 /*
@@ -327,7 +334,7 @@ function shutdown_schedule(wet_mass, dry_mass, engine_counts, atmo, dv, TWRg) {
     return [shutdown_sequence, total_dv, current_mass, engine_counts];
 }
 
-function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting) {
+function optimize_flight(payload, prefuel, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting) {
     var best, dry_mass, wet_mass, limited_engines, shutdown_sequence, staged_dv, stage_mass, final_engines, ssret, last_thrust, last_ve, requested_dv, last_eexp, fuel_mass, stage_dv, actual_dv, requested_fuel, requested_burn_time, init_TWRg, end_TWRg, fuel_used, cost, tmp_count;
 
     function mass_summer(x) { return x.engine.mass * x.count; }
@@ -336,7 +343,7 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
 
     while (tank_count >= 0) {
         dry_mass = payload  + sum(engine_counts, mass_summer) + tank.mass * tank_count;
-        wet_mass = dry_mass + sum(engine_counts, fuel_summer) + tank.fuel * tank_count;
+        wet_mass = dry_mass + sum(engine_counts, fuel_summer) + tank.fuel * tank_count + prefuel;
 
         if (allow_limiting) {
             limited_engines = limit_engine_thrust(engine_counts, wet_mass, TWRg, atmo);
@@ -401,7 +408,7 @@ function optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_coun
     return best;
 }
 
-function solve(payload, dv, TWRg, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks) {
+function solve(payload, prefuel, dv, TWRg, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks) {
     var results = [], num_engines, engine_counts, thrusts;
     // Loop through the number of allowed engines
     for (num_engines = 1; num_engines <= max_engines; num_engines += 1) {
@@ -428,10 +435,10 @@ function solve(payload, dv, TWRg, atmo, max_engines, max_thrust_ratio, allow_dea
                         if (tank.mass === 0) {
                             tank_count = 0;
                         } else {
-                            tank_count = required_tanks(payload, tank, engine_counts, atmo, dv);
+                            tank_count = required_tanks(payload, prefuel, tank, engine_counts, atmo, dv);
                         }
 
-                        best = optimize_flight(payload, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting);
+                        best = optimize_flight(payload, prefuel, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting);
                         if (best) {
                             results.push(best);
                         }
@@ -441,29 +448,23 @@ function solve(payload, dv, TWRg, atmo, max_engines, max_thrust_ratio, allow_dea
         });
     }
 
-    if (results.length === 0) {
-        return [];
-    }
-
-    awards.forEach(function (award) {
-        var best, best_score = award.initial;
-        results.forEach(function (rocket) {
-            var score = award.lookup(rocket);
-            if (score === award.reduce(score, best_score)) {
-                best = rocket;
-                best_score = score;
-            }
-        });
-        best.awards.push(award);
-    });
-
-    return results.filter(function (x) { return x.awards.length > 0; });
+    return results;
 }
 
 
 /*
  * Interface
  */
+
+function select_parts(from, to, type, cond) {
+    $.each(from, function (k, v) {
+        v.forEach(function (part) {
+            if ($(part.selector).prop('checked') && part.type === type && cond(part)) {
+                to.push(part);
+            }
+        });
+    });
+}
 
 function generate_results_inner() {
     if ($('.has-error').length) {
@@ -472,7 +473,7 @@ function generate_results_inner() {
         return;
     }
 
-    var payload, dv, twr, atmo, max_engines, gimbal, allow_deadend, allow_shutdown, allow_limiting, any_tanks, body, max_thrust_ratio, g0, engines, tanks, results, html;
+    var prefuel, payload, dv, twr, atmo, max_engines, gimbal, allow_deadend, allow_shutdown, allow_limiting, any_tanks, body, max_thrust_ratio, g0, engines, tanks, results, html;
 
     // Read the data in
     payload         = parseFloat($('#payload').val());
@@ -480,6 +481,7 @@ function generate_results_inner() {
     twr             = parseFloat($('#twr').val());
     atmo            = parseFloat($('#atmo').val()) / 100;
     max_engines     = parseInt($('#maxengines').val(), 10);
+    payloadmono     = parseFloat($('#payloadmono').val());
     gimbal          = $('#gimbal').prop('checked');
     allow_deadend   = !$('#deadend').prop('checked');
     allow_shutdown  = !$('#shutdown').prop('checked');
@@ -490,31 +492,44 @@ function generate_results_inner() {
     max_thrust_ratio = 25;
     g0 = bodies[body].gravity;
 
-    engines = [];
-    tanks = [new Part("DUMMY TANK", 4, false, 0, 0, 0, 0, 0, 0, 0, [])];
+    results = [];
 
-    // Construct the set of engines and tanks to consider
-    $.each(all_engines, function (k, v) {
-        v.forEach(function (part) {
-            if ($(part.selector).prop('checked')) {
-                // Only engines with gimbal if requested
-                if (!gimbal || part.gimbal > 0) {
-                    engines.push(part);
+    ['LF/O', 'mono'].forEach(function (type) {
+        prefuel = 0;
+        if (type === 'mono') {
+            prefuel = payloadmono * 0.004;
+        }
+        engines = [];
+        tanks = [new Part(type, "DUMMY TANK", 4, false, 0, 0, 0, 0, 0, 0, 0, [])];
+
+        // Construct the set of engines and tanks to consider
+        select_parts(all_engines, engines, type, function (part) { return !gimbal || part.gimbal > 0; });
+        select_parts(all_tanks, tanks, type, function (part) { return true; });
+
+        // Solve!
+        results = results.concat(solve(payload-prefuel, prefuel, dv, twr * g0, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks));
+    });
+
+    // Set awards
+    if (results.length > 0) {
+        awards.forEach(function (award) {
+            var best, best_score = award.initial;
+            results.forEach(function (rocket) {
+                var score = award.lookup(rocket);
+                // In the event of a tie, take the first one, esp important for
+                // monoprop engines with zero mass, take the case with fewer
+                // engines.
+                if (score != best_score && score === award.reduce(score, best_score)) {
+                    best = rocket;
+                    best_score = score;
                 }
-            }
+            });
+            best.awards.push(award);
         });
-    });
 
-    $.each(all_tanks, function (k, v) {
-        v.forEach(function (part) {
-            if ($(part.selector).prop('checked')) {
-                tanks.push(part);
-            }
-        });
-    });
+        results = results.filter(function (x) { return x.awards.length > 0; });
+    }
 
-    // Solve!
-    results = solve(payload, dv, twr * g0, atmo, max_engines, max_thrust_ratio, allow_deadend, allow_shutdown, allow_limiting, any_tanks, engines, tanks);
 
     // Generate output html
     html = "<div class='header'><h4 class='text-muted'>Rockets</h3></div>";
@@ -535,7 +550,7 @@ function generate_results_inner() {
             html += "<br/>";
         });
 
-        if (r.tank !== tanks[0]) {
+        if (r.tank.name !== "DUMMY TANK") {
             html += r.tank_count + 'x ' + r.tank.name;
         }
 
@@ -548,7 +563,6 @@ function generate_results_inner() {
         html += '<td>' + (r.mass - r.fuel_mass).toFixed(2) + ' t</td>';
 
         html += '</tr></tbody></table></div>';
-        //html += '<br/><div class="header"><h5 class="text-muted">Flight Plan</h5></div>'
         html += '<br/>';
 
         html += '<div class="table-responsive"><table class="table"><thead><tr> <th>Phase</th> <th>Phase Δv</th> <th>TWR</th> <th>Fuel Burned</th> <th>Burn Time</th> <th>Shutdown Mass</th> </tr></thead> <tbody>';
@@ -659,7 +673,7 @@ $(document).ready(function () {
         }
     });
 
-    ['#payload', '#deltav', '#twr'].forEach(function (x) {
+    ['#payload', '#deltav', '#twr', '#payloadmono'].forEach(function (x) {
         $(x).change(function () {
             if (parseFloat($(x).val()) > 0) {
                 $(x).parents('.form-group').removeClass('has-error');
@@ -699,6 +713,7 @@ $(document).ready(function () {
     $('#payload').val("1");
     $('#twr').val("2.0");
     $('#maxengines').val("3");
+    $('#payloadmono').val("0");
     $('#engine-Stock').prop('checked', true).trigger('change');
     $('#tank-Stock').prop('checked', true).trigger('change');
 });
