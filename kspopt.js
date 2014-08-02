@@ -97,6 +97,20 @@ var all_engines = {
         new Part("LF/O", "LFB KR-1x2",                                  3, true,  16400, 10,   32, 2000, 290, 340, 0.5, []),
         new Part("LF/O", "Kerbodyne KR-2L Advanced Engine",             4, false, 20850, 6.5,  0,  2500, 280, 380, 1.0, []),
         new Part("LF/O", "S3 KS-25x4 Engine Cluster",                   4, true,  32400, 9.75, 0,  3200, 320, 360, 0.5, [])
+    ],
+    KWRocketry26c: [
+        new Part("LF/O", "KW Rocketry Maverick-1D",                          2, false, 1200,  2,    0, 350,   320, 355, 0.25, []),
+        new Part("LF/O", "KW Rocketry Vesta VR-1",                           2, false, 1200,  0.75, 0, 90,    350, 400, 0.75, []),
+        new Part("LF/O", "KW Rocketry WildCat-V",                            2, false, 950,   1.5,  0, 230,   325, 370, 0.5,  []),
+        new Part("LF/O", "KW Rocketry Griffon-G8D",                          3, false, 3300,  8,    0, 1900,  280, 325, 0.5,  []),
+        new Part("LF/O", "KW Rocketry Maverick-V",                           3, false, 2650,  6,    0, 1400,  285, 335, 1.0,  []),
+        new Part("mono", "KW Rocketry Hypergolic Service Propulsion System", 3, false, 1800,  2.0,  0, 200,   240, 410, 1.0,  []),
+        new Part("LF/O", "KW Rocketry Vesta VR-9D",                          3, false, 2200,  5,    0, 600,   310, 380, 1.5,  []),
+        new Part("LF/O", "KW Rocketry Griffon XX",                           4, false, 15000, 18,   0, 5000,  265, 310, 0.5,  []),
+        new Part("LF/O", "KW Rocketry Titan-T1",                             4, false, 10000, 14,   0, 3600,  270, 325, 1.5,  []),
+        new Part("LF/O", "KW Rocketry Wildcat-XR",                           4, false, 7500,  8,    0, 1400,  275, 370, 0.75, []),
+        new Part("LF/O", "KW Rocketry Griffon Century",                      5, true,  55000, 32,   0, 11000, 257, 300, 0.55, []),
+        new Part("LF/O", "KW Rocketry Titan V",                              5, false, 28000, 22,   0, 5800,  260, 335, 1.0,  []),
     ]
 };
 
@@ -105,6 +119,8 @@ var all_engines = {
  *
  * FL-T100 is considered large since we allow engines to be mounted to bigger
  * tanks, but not the opposite, and FL-T100 has the same fuel/mass as large
+ *
+ * Same for the KW LFT parts S[AB]*, SC*, V*, *RCS
  *
  * FL-R10 is better than FL-R25, considered size 2 instead to replace it
  * DUMMY TANK is used to simulate not adding tanks to LFB's
@@ -122,6 +138,12 @@ var all_tanks = {
         new Part("LF/O", "ROUND-8 Toroidal Fuel Tank",                 1, false, 360,  0.025,  0.111,    0, 0, 0, 0, []),
         new Part("LF/O", "FL-T100 Fuel Tank",                          3, false, 250,  0.0625, 0.5,      0, 0, 0, 0, [[8, 1600], [2, 425]]),
         new Part("LF/O", "Kerbodyne S3-3600 Tank",                     4, false, 7200, 2.5,    18.0,     0, 0, 0, 0, [[4, 22800]])
+    ],
+    KWRocketry26c: [
+        new Part("LF/O", "KW Rocketry SA-05 LFT",                      3, false, 240,   0.0663, 0.6,  0, 0, 0, 0, []),
+        new Part("LF/O", "KW Rocketry SC-05 LFT",                      4, false, 6480,  1.79,   16.2, 0, 0, 0, 0, []),
+        new Part("LF/O", "KW Rocketry V-05 LFT",                       5, false, 15360, 4.25,   38.4, 0, 0, 0, 0, []),
+        new Part("mono", "KW Rocketry SA-1 RCS Fuel",                  4, false, 800,   0.15,   0.4,  0, 0, 0, 0, [[27, 11880], [8, 3520]]),
     ]
 };
 
