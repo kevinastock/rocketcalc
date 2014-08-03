@@ -364,6 +364,11 @@ function optimize_flight(payload, prefuel, dv, TWRg, atmo, engine_counts, tank, 
     function cost_summer(x) { return x.engine.cost * x.count; }
 
     while (tank_count >= 0) {
+        if (tank.size == 0 && tank_count < 2) {
+            // Radial tanks require 2+
+            break;
+        }
+
         dry_mass = payload  + sum(engine_counts, mass_summer) + tank.mass * tank_count;
         wet_mass = dry_mass + sum(engine_counts, fuel_summer) + tank.fuel * tank_count + prefuel;
 
@@ -458,6 +463,11 @@ function solve(payload, prefuel, dv, TWRg, atmo, max_engines, max_thrust_ratio, 
                             tank_count = 0;
                         } else {
                             tank_count = required_tanks(payload, prefuel, tank, engine_counts, atmo, dv);
+                        }
+
+                        if (tank.size == 0) {
+                            // Radial tanks require 2+
+                            tank_count = Math.max(2, tank_count);
                         }
 
                         best = optimize_flight(payload, prefuel, dv, TWRg, atmo, engine_counts, tank, tank_count, allow_shutdown, allow_limiting);
