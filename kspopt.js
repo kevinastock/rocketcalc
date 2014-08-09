@@ -505,7 +505,7 @@ function generate_results_inner() {
         return;
     }
 
-    var prefuel, payload, dv, twr, atmo, max_engines, gimbal, allow_deadend, allow_shutdown, allow_limiting, any_tanks, body, max_thrust_ratio, g0, engines, tanks, results, html;
+    var prefuel, payload, payloadmono, dv, twr, atmo, max_engines, gimbal, allow_deadend, allow_shutdown, allow_limiting, any_tanks, body, max_thrust_ratio, g0, engines, tanks, results, html;
 
     // Read the data in
     payload         = parseFloat($('#payload').val());
