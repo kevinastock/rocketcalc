@@ -80,24 +80,26 @@ function Shutdown(engine_counts, engine, count, stage_dv, burn_time, init_mass, 
  */
 var all_engines = {
     Stock: [
-        new Part("mono", "O-10 MonoPropellant Engine",                  0, true,  800,   0.00, 0,  20,   220, 290, 0,   []),
-        new Part("LF/O", "Rockomax 24-77",                              0, true,  480,   0.09, 0,  20,   250, 300, 1.0, []),
-        new Part("LF/O", "Rockomax Mark 55 Radial Mount Liquid Engine", 0, true,  850,   0.9,  0,  120,  290, 320, 3.0, []),
-        new Part("LF/O", "LV-1 Liquid Fuel Engine",                     1, false, 350,   0.03, 0,  4,    220, 290, 0,   []),
-        new Part("LF/O", "Rockomax 48-7S",                              1, false, 300,   0.1,  0,  30,   300, 350, 1.0, []),
-        new Part("LF/O", "LV-T30 Liquid Fuel Engine",                   2, false, 850,   1.25, 0,  215,  320, 370, 0,   []),
-        new Part("LF/O", "LV-T45 Liquid Fuel Engine",                   2, false, 950,   1.5,  0,  200,  320, 370, 1.0, []),
-        new Part("LF/O", "LV-909 Liquid Fuel Engine",                   2, false, 750,   0.5,  0,  50,   300, 390, 0.5, []),
-        new Part("LF/O", "R.A.P.I.E.R. Engine",                         2, false, 3600,  1.2,  0,  175,  320, 360, 3.0, []),
-        new Part("LF/O", "Toroidal Aerospike Rocket",                   2, true,  3850,  1.5,  0,  175,  388, 390, 0,   []),
-        new Part("LF/O", "LV-N Atomic Rocket Motor",                    2, false, 8700,  2.25, 0,  60,   220, 800, 1.0, []),
-        new Part("LF/O", "Rockomax 'Poodle' Liquid Engine",             3, false, 1600,  2,    0,  220,  270, 390, 2.5, []),
-        new Part("LF/O", "Rockomax 'Mainsail' Liquid Engine",           3, false, 5650,  6,    0,  1500, 320, 360, 1.0, []),
-        new Part("LF/O", "Rockomax 'Skipper' Liquid Engine",            3, false, 2850,  3,    0,  650,  320, 370, 1.0, []),
-        new Part("LF/O", "LFB KR-1x2",                                  3, true,  16400, 10,   32, 2000, 290, 340, 0.5, []),
-        new Part("LF/O", "Kerbodyne KR-2L Advanced Engine",             4, false, 20850, 6.5,  0,  2500, 280, 380, 1.0, []),
-        new Part("LF/O", "S3 KS-25x4 Engine Cluster",                   4, true,  32400, 9.75, 0,  3200, 320, 360, 0.5, [])
+        //       type,   name,                                          size, deadend, cost,  mass, fuel, thrust, iatm, ivac, gimbal, cost_save
+        new Part("mono", 'O-10 "Puff" MonoPropellant Engine',           0,    true,    150,   0.09, 0,    20,     120,  250,  0,      []),
+        new Part("LF/O", '24-77 "Twitch" Liquid Fuel Engine',           0,    true,    400,   0.09, 0,    16,     250,  290,  8,      []),
+        new Part("LF/O", 'Mk-55 "Thud" Liquid Fuel Engine',             0,    true,    820,   0.9,  0,    120,    275,  305,  8,      []),
+        new Part("LF/O", 'LV-1 "Ant" Liquid Fuel Engine',               1,    false,   110,   0.02, 0,    2,      80,   315,  0,      []),
+        new Part("LF/O", '48-7S "Spark" Liquid Fuel Engine',            1,    false,   200,   0.1,  0,    18,     270,  300,  3,      []),
+        new Part("LF/O", 'LV-T30 "Reliant" Liquid Fuel Engine',         2,    false,   1100,  1.25, 0,    215,    280,  300,  0,      []),
+        new Part("LF/O", 'LV-T45 "Swivel" Liquid Fuel Engine',          2,    false,   1200,  1.5,  0,    200,    270,  320,  3,      []),
+        new Part("LF/O", 'LV-909 "Terrier" Liquid Fuel Engine',         2,    false,   390,   0.5,  0,    60,     85,   345,  4,      []),
+        new Part("LF/O", 'CR-7 R.A.P.I.E.R. Engine',                    2,    false,   6000,  2.0,  0,    180,    275,  305,  3,      []),
+        new Part("LF/O", 'T-1 Toroidal "Aerospike" Liquid Fuel Engine', 2,    true,    3850,  1.0,  0,    180,    290,  340,  0,      []),
+        new Part("LF/O", 'LV-N "Nerv" Atomic Rocket Motor',             2,    false,   10000, 3.0,  0,    60,     185,  800,  0,      []),
+        new Part("LF/O", 'RE-L10 "Poodle" Liquid Fuel Engine',          3,    false,   1300,  1.75, 0,    250,    90,   350,  4.5,    []),
+        new Part("LF/O", 'RE-M3 "Mainsail" Liquid Engine',              3,    false,   13000, 6.0,  0,    1500,   285,  310,  2,      []),
+        new Part("LF/O", 'RE-I5 "Skipper" Liquid Fuel Engine',          3,    false,   5300,  3.0,  0,    650,    280,  320,  2,      []),
+        new Part("LF/O", 'LFB KR-1x2 "Twin-Boar" Liquid Fuel Engine',   3,    true,    17000, 10.5, 32,   2000,   280,  300,  1.5,    []),
+        new Part("LF/O", 'Kerbodyne KR-2L+ "Rhino" Liquid Fuel Engine', 4,    false,   25000, 9.0,  0,    2000,   255,  340,  4,      []),
+        new Part("LF/O", 'S3 KS-25x4 "Mammoth" Liquid Fuel Engine',     4,    true,    39000, 15.0, 0,    4000,   295,  315,  2,      [])
     ],
+    /*
     KWRocketry26c: [
         new Part("LF/O", "KW Rocketry Maverick-1D",                          2, false, 1200,  2,    0, 350,   320, 355, 0.25, []),
         new Part("LF/O", "KW Rocketry Vesta VR-1",                           2, false, 1200,  0.75, 0, 90,    350, 400, 0.75, []),
@@ -112,6 +114,7 @@ var all_engines = {
         new Part("LF/O", "KW Rocketry Griffon Century",                      5, true,  55000, 32,   0, 11000, 257, 300, 0.55, []),
         new Part("LF/O", "KW Rocketry Titan V",                              5, false, 28000, 22,   0, 5800,  260, 335, 1.0,  []),
     ]
+    */
 };
 
 /*
@@ -139,26 +142,28 @@ var all_tanks = {
         new Part("LF/O", "FL-T100 Fuel Tank",                          3, false, 250,  0.0625, 0.5,      0, 0, 0, 0, [[8, 1600], [2, 425]]),
         new Part("LF/O", "Kerbodyne S3-3600 Tank",                     4, false, 7200, 2.5,    18.0,     0, 0, 0, 0, [[4, 22800]])
     ],
+    /*
     KWRocketry26c: [
         new Part("LF/O", "KW Rocketry SA-05 LFT",                      3, false, 240,   0.0663, 0.6,  0, 0, 0, 0, []),
         new Part("LF/O", "KW Rocketry SC-05 LFT",                      4, false, 6480,  1.79,   16.2, 0, 0, 0, 0, []),
         new Part("LF/O", "KW Rocketry V-05 LFT",                       5, false, 15360, 4.25,   38.4, 0, 0, 0, 0, []),
         new Part("mono", "KW Rocketry SA-1 RCS Fuel",                  4, false, 800,   0.15,   0.4,  0, 0, 0, 0, [[27, 11880], [8, 3520]]),
     ]
+    */
 };
 
 var bodies = {
     Moho   : {gravity: 2.70,  atmo: 0,   dv: 1740},
-    Eve    : {gravity: 16.7,  atmo: 100, dv: 12000},
+    Eve    : {gravity: 16.7,  atmo: 100, dv: 9000},
     Gilly  : {gravity: 0.049, atmo: 0,   dv: 60},
-    Kerbin : {gravity: 9.81,  atmo: 100, dv: 4500},
+    Kerbin : {gravity: 9.81,  atmo: 100, dv: 3200},
     Mun    : {gravity: 1.63,  atmo: 0,   dv: 1160},
     Minmus : {gravity: 0.491, atmo: 0,   dv: 360},
-    Duna   : {gravity: 2.94,  atmo: 20,  dv: 1300},
+    Duna   : {gravity: 2.94,  atmo: 20,  dv: 1200},
     Ike    : {gravity: 1.10,  atmo: 0,   dv: 780},
     Dres   : {gravity: 1.13,  atmo: 0,   dv: 860},
-    Jool   : {gravity: 7.85,  atmo: 100, dv: 22000},
-    Laythe : {gravity: 7.85,  atmo: 80,  dv: 3200},
+    Jool   : {gravity: 7.85,  atmo: 100, dv: 10000},
+    Laythe : {gravity: 7.85,  atmo: 60,  dv: 2600},
     Vall   : {gravity: 2.31,  atmo: 0,   dv: 1720},
     Tylo   : {gravity: 7.85,  atmo: 0,   dv: 4540},
     Bop    : {gravity: 0.589, atmo: 0,   dv: 440},
